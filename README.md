@@ -11,11 +11,17 @@ url:- https://sambit-my-blog.netlify.app/
 
 **Client:** Html, css, javascript, React, Redux, Material UI
 
+**Storage:** Here we use local storage to store the data.
+
 # Lets get a look of the features of the app
 
 This blog application features content across four main interests: Travel, LifeStyle, Food, and Technology. It includes a light and dark theme switcher to enhance user experience.
 
 ![Screenshot (146)](https://github.com/SambitBNaik/Vecros_Assignment_Sambit/assets/102984093/f87b204e-2d75-41c3-92c5-0351962e7815)
+
+Here Home page doesnt contain any features insteade of seraching , moto is to display the blogs only. if any edit or delete want to be done it is needed to done inside the respective categories.
+![Home](https://github.com/SambitBNaik/Vecros_Assignment_Sambit/assets/102984093/c696de94-aa68-42bd-a782-329b867b041c)
+
 
 **Ligth and Dark Mode:** This site contain a switch where we can toggle bbetween the light and dark mode.
 
