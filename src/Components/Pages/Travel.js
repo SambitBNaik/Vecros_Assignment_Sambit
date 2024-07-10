@@ -1,115 +1,15 @@
-// import React, { useState, useId } from 'react'
-// import {useDispatch, useSelector} from 'react-redux';
-// import { Button, TextField,Card, CardContent, Typography, CardActions, IconButton } from '@mui/material';
-// import { addBlog,deleteBlog,editBlog } from '../Redux/blogSlice';
-// import EditIcon from '@mui/icons-material/Edit';
-// import DeleteIcon from '@mui/icons-material/Delete';
-// import { v4 as uuid } from "uuid";
-
-// const Travel = () => {
-//     const dispatch=useDispatch();
-//     const blogs=useSelector(state=> state.blogs.blogs);
-
-//     const[newBlogTitle,setNewBlogTitle]=useState('');
-//     const[newBlogContent,setNewBlogContent]=useState('');
-//     const unique_id=uuid();
-
-//     const handleAddBlog=()=>{
-//         dispatch(addBlog({
-//             id:unique_id,
-//             title: newBlogTitle,
-//             content: newBlogContent,
-//             category:'Travel'
-//         }));
-
-//         setNewBlogTitle('');
-//         setNewBlogContent('');
-//     }
-
-//     const handleEditBlog=(id,updatedBlog)=>{
-//         dispatch(editBlog({id, updatedBlog: updatedBlog}))
-//     }
-
-//     const handleDeleteBlog=(id)=>{
-//         dispatch(deleteBlog(id));
-//     }
-
-//   return (
-//     <div>
-//         <div>
-//             <TextField
-//             type='text'
-//             variant='outlined'
-//             placeholder='Search Blogs'
-//             sx={{
-//                 height:'50px',
-//                 width:'450px',
-//                 padding:'12px',
-
-//             }}
-//             />  
-//         </div>
-//         <div style={{marginBottom:'20px'}}>
-//             <TextField
-//             type='text'
-//             value={newBlogTitle}
-//             variant='outlined'
-//             label="Blog Title"
-//             onChange={(e)=>{setNewBlogTitle(e.target.value)}}
-//             style={{marginBottom:'10px'}} 
-//             />
-//             <TextField/>
-//             <TextField
-//                value={newBlogContent}
-//                onChange={(e)=>setNewBlogContent(e.target.value)}
-//                variant="outlined"
-//                label='Blog Content'
-//                multiline
-//                rows={4}
-//                fullWidth
-//                style={{marginBottom:"10px"}}
-//             />
-//             <Button variant='contained' color='primary' onClick={handleAddBlog}>Add Blog</Button>
-//         </div>
-//         <div>
-//             {blogs.map(blog=>(
-//                 blog.category==='Travel' &&(
-//                     <Card key={blog.id} style={{marginBottom: '10px'}}>
-//                         <CardContent>
-//                             <Typography variant='h5' component="h2">
-//                                 {blog.title}
-//                             </Typography>
-//                             <Typography variant='body2' componenet="p" style={{marginTop: '10px'}}>
-//                                 {blog.content}
-//                             </Typography>
-//                         </CardContent>
-//                         <CardActions>
-//                             <IconButton aria-label="edit" onClick={()=>handleEditBlog(blog.id,{title:"Update Title", content:"Updated Content"})}>
-//                                 <EditIcon/>
-//                             </IconButton>
-//                             <IconButton aria-label="delete" onClick={()=>handleDeleteBlog(blog.id)}>
-//                                 <DeleteIcon/>
-//                             </IconButton>
-//                         </CardActions>
-//                     </Card>
-//                 )
-//             ))}
-//         </div>
-//     </div>
-//   );
-// };
-
-// export default Travel
-
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, TextField, Card, CardContent, Typography, CardActions, IconButton } from '@mui/material';
+import { Button, TextField, Card, CardContent, Typography, CardActions, IconButton, CardMedia, Collapse, Grid, Box } from '@mui/material';
 import { addBlog, deleteBlog, editBlog } from '../Redux/blogSlice';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import clsx from 'clsx';
 import { v4 as uuid } from "uuid";
+import AddBlogModal from '../Modal/AddBlogModal';
 
 const Travel = () => {
     const dispatch = useDispatch();
@@ -117,22 +17,50 @@ const Travel = () => {
 
     const [newBlogTitle, setNewBlogTitle] = useState('');
     const [newBlogContent, setNewBlogContent] = useState('');
+    const [newBlogImage, setNewBlogImage] = useState('');
+    const [newBlogAuthor, setNewBlogAuthor] = useState('');
+    const [newBlogDate, setNewBlogDate] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('Technology');
     const [editMode, setEditMode] = useState(null);
     const [editBlogTitle, setEditBlogTitle] = useState('');
     const [editBlogContent, setEditBlogContent] = useState('');
+    const [editBlogImage, setEditBlogImage] = useState('');
+    const [editBlogAuthor, setEditBlogAuthor] = useState('');
+    const [editBlogDate, setEditBlogDate] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [expandedBlogs, setExpandedBlogs] = useState({});
+
+  
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleOpenModal = () => {
+        setOpenModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setNewBlogTitle('');
+        setNewBlogContent('');
+        setNewBlogImage('');
+        setNewBlogAuthor('');
+        setNewBlogDate('');
+        setSelectedCategory('Technology'); 
+    };
 
     const handleAddBlog = () => {
-        if (newBlogTitle && newBlogContent) {
+        if (newBlogTitle && newBlogContent && newBlogDate) {
             const unique_id = uuid();
             dispatch(addBlog({
                 id: unique_id,
                 title: newBlogTitle,
                 content: newBlogContent,
-                category: 'Travel'
+                image: newBlogImage,
+                author: newBlogAuthor,
+                date: newBlogDate,
+                category: selectedCategory
             }));
 
-            setNewBlogTitle('');
-            setNewBlogContent('');
+            handleCloseModal();
         }
     };
 
@@ -140,73 +68,103 @@ const Travel = () => {
         setEditMode(blog.id);
         setEditBlogTitle(blog.title);
         setEditBlogContent(blog.content);
+        setEditBlogImage(blog.image);
+        setEditBlogAuthor(blog.author);
+        setEditBlogDate(blog.date);
     };
 
     const handleEditSave = (id) => {
-        dispatch(editBlog({ id, updatedBlog: { title: editBlogTitle, content: editBlogContent } }));
+        dispatch(editBlog({ 
+            id, updatedBlog: { 
+                title: editBlogTitle, 
+                content: editBlogContent, 
+                image: editBlogImage, 
+                author: editBlogAuthor, 
+                date: editBlogDate 
+            } 
+        }));
         setEditMode(null);
         setEditBlogTitle('');
         setEditBlogContent('');
+        setEditBlogImage('');
+        setEditBlogAuthor('');
+        setEditBlogDate('');
     };
 
     const handleEditCancel = () => {
         setEditMode(null);
         setEditBlogTitle('');
         setEditBlogContent('');
+        setEditBlogImage('');
+        setEditBlogAuthor('');
+        setEditBlogDate('');
     };
 
     const handleDeleteBlog = (id) => {
         dispatch(deleteBlog(id));
     };
 
+    const handleSearch = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleExpandClick = (blogId) => {
+        setExpandedBlogs(prevState => ({
+            ...prevState,
+            [blogId]: !prevState[blogId]
+        }));
+    };
+
+    const filteredBlogs = blogs.filter(blog => {
+        return blog.category === 'Travel' &&
+            (blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                blog.content.toLowerCase().includes(searchQuery.toLowerCase()));
+    });
+
     return (
-        <div>
-            <div>
+        <div style={{ padding: '20px' }}>
+            <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" mb={4}>
                 <TextField
                     type='text'
                     variant='outlined'
                     placeholder='Search Blogs'
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    fullWidth
                     sx={{
-                        height: '50px',
-                        width: '450px',
-                        padding: '12px',
+                        marginBottom: '10px',
+                        '@media (min-width: 600px)': {
+                            width: '400px',
+                        },
+                        '@media (min-width: 900px)': {
+                            width: '500px',
+                        },
                     }}
                 />
-            </div>
-            <div style={{ marginBottom: '20px' }}>
-                <TextField
-                    type='text'
-                    value={newBlogTitle}
-                    variant='outlined'
-                    label="Blog Title"
-                    onChange={(e) => { setNewBlogTitle(e.target.value) }}
-                    style={{ marginBottom: '10px' }}
-                />
-                <TextField
-                    value={newBlogContent}
-                    onChange={(e) => setNewBlogContent(e.target.value)}
-                    variant="outlined"
-                    label='Blog Content'
-                    multiline
-                    rows={4}
-                    fullWidth
-                    style={{ marginBottom: "10px" }}
-                />
-                <Button variant='contained' color='primary' onClick={handleAddBlog}>Add Blog</Button>
-            </div>
-            <div>
-                {blogs.map(blog => (
-                    blog.category === 'Travel' && (
-                        <Card key={blog.id} style={{ marginBottom: '10px' }}>
+                <Button variant='contained' color='primary' onClick={handleOpenModal} style={{ marginBottom: '20px' }}>
+                    Add Blog
+                </Button>
+            </Box>
+
+            <Grid container spacing={2} justifyContent="center">
+                {filteredBlogs.map(blog => (
+                    <Grid item key={blog.id} xs={12} sm={6} md={4} display="flex" justifyContent="center">
+                        <Card sx={{ width: 345, marginBottom: '20px' }}>
+                            <CardMedia
+                                component="img"
+                                height="140"
+                                image={blog.image}
+                                alt={blog.title}
+                            />
                             <CardContent>
                                 {editMode === blog.id ? (
                                     <>
                                         <TextField
                                             type='text'
                                             value={editBlogTitle}
+                                            onChange={(e) => setEditBlogTitle(e.target.value)}
                                             variant='outlined'
                                             label="Blog Title"
-                                            onChange={(e) => { setEditBlogTitle(e.target.value) }}
                                             fullWidth
                                             style={{ marginBottom: '10px' }}
                                         />
@@ -220,14 +178,60 @@ const Travel = () => {
                                             fullWidth
                                             style={{ marginBottom: "10px" }}
                                         />
+                                        <TextField
+                                            type='text'
+                                            value={editBlogImage}
+                                            onChange={(e) => setEditBlogImage(e.target.value)}
+                                            variant='outlined'
+                                            label="Image URL"
+                                            fullWidth
+                                            style={{ marginBottom: '10px' }}
+                                        />
+                                        <TextField
+                                            type='text'
+                                            value={editBlogAuthor}
+                                            onChange={(e) => setEditBlogAuthor(e.target.value)}
+                                            variant='outlined'
+                                            label="Author"
+                                            fullWidth
+                                            style={{ marginBottom: '10px' }}
+                                        />
+                                        <TextField
+                                            type='date'
+                                            value={editBlogDate}
+                                            onChange={(e) => setEditBlogDate(e.target.value)}
+                                            variant='outlined'
+                                            label="Publication Date"
+                                            fullWidth
+                                            style={{ marginBottom: '10px' }}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                        />
                                     </>
                                 ) : (
                                     <>
-                                        <Typography variant='h5' component="h2">
+                                        <Typography gutterBottom variant="h5" component="div">
                                             {blog.title}
                                         </Typography>
-                                        <Typography variant='body2' component="p" style={{ marginTop: '10px' }}>
-                                            {blog.content}
+                                        <Collapse in={expandedBlogs[blog.id]} timeout="auto" unmountOnExit>
+                                            <Typography variant="body2" color="text.secondary">
+                                                {blog.content}
+                                            </Typography>
+                                        </Collapse>
+                                        <IconButton
+                                            className={clsx({
+                                                'expand': true,
+                                                'expandOpen': expandedBlogs[blog.id],
+                                            })}
+                                            onClick={() => handleExpandClick(blog.id)}
+                                            aria-expanded={expandedBlogs[blog.id]}
+                                            aria-label="show more"
+                                        >
+                                            <ExpandMoreIcon />
+                                        </IconButton>
+                                        <Typography variant='caption' color='textSecondary' style={{ marginTop: '10px' }}>
+                                            By {blog.author} | Published on {blog.date}
                                         </Typography>
                                     </>
                                 )}
@@ -254,12 +258,32 @@ const Travel = () => {
                                 )}
                             </CardActions>
                         </Card>
-                    )
+                    </Grid>
                 ))}
-            </div>
+            </Grid>
+
+            {/* Modal */}
+            <AddBlogModal
+                open={openModal}
+                handleClose={handleCloseModal}
+                handleAddBlog={handleAddBlog}
+                newBlogTitle={newBlogTitle}
+                setNewBlogTitle={setNewBlogTitle}
+                newBlogContent={newBlogContent}
+                setNewBlogContent={setNewBlogContent}
+                newBlogImage={newBlogImage}
+                setNewBlogImage={setNewBlogImage}
+                newBlogAuthor={newBlogAuthor}
+                setNewBlogAuthor={setNewBlogAuthor}
+                newBlogDate={newBlogDate}
+                setNewBlogDate={setNewBlogDate}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+            />
         </div>
     );
 };
 
 export default Travel;
+
 

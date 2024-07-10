@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -11,13 +11,13 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { TextField } from '@mui/material';
+import Switch from '@mui/material/Switch';
+import { FormControlLabel } from '@mui/material';
 
-const Navbar = () => {
+const Navbar = ({ toggleTheme }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const isSmallScreen= useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -28,13 +28,17 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{backgroundColor:"#546e7a"}}>
+    <AppBar position="static" sx={{ backgroundColor: theme.palette.primary.main }}>
       <Container>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{flexGrow: isMobile ? 1 : 0}}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: isMobile ? 1 : 0, marginRight: 'auto' }}>
             MY BLOG
           </Typography>
-          <div style={{ flexGrow: 1}} />
+          <FormControlLabel
+            control={<Switch checked={theme.palette.mode === 'dark'} onChange={toggleTheme} />}
+            label={theme.palette.mode === 'dark' ? 'Dark Mode' : 'Light Mode'}
+            sx={{ marginLeft: 'auto' }}
+          />
           {isMobile ? (
             <>
               <IconButton
