@@ -56,6 +56,7 @@ const Navbar = ({ toggleTheme }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
+                <MenuItem component={Link} to="/" onClick={handleMenuClose}>Home</MenuItem>
                 <MenuItem component={Link} to="/travel" onClick={handleMenuClose}>Travel</MenuItem>
                 <MenuItem component={Link} to="/lifeStyle" onClick={handleMenuClose}>LifeStyle</MenuItem>
                 <MenuItem component={Link} to="/food" onClick={handleMenuClose}>Food</MenuItem>
@@ -64,6 +65,7 @@ const Navbar = ({ toggleTheme }) => {
             </>
           ) : (
             <>
+              <Button color="inherit" component={Link} to="/">Home</Button>
               <Button color="inherit" component={Link} to="/travel">Travel</Button>
               <Button color="inherit" component={Link} to="/lifeStyle">LifeStyle</Button>
               <Button color="inherit" component={Link} to="/food">Food</Button>

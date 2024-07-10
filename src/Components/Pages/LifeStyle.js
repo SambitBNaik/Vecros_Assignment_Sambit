@@ -20,7 +20,7 @@ const LifeStyle = () => {
     const [newBlogImage, setNewBlogImage] = useState('');
     const [newBlogAuthor, setNewBlogAuthor] = useState('');
     const [newBlogDate, setNewBlogDate] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('LifeStyle');
+    const [selectedCategory, setSelectedCategory] = useState('Lifestyle');
     const [editMode, setEditMode] = useState(null);
     const [editBlogTitle, setEditBlogTitle] = useState('');
     const [editBlogContent, setEditBlogContent] = useState('');
@@ -115,7 +115,7 @@ const LifeStyle = () => {
     };
 
     const filteredBlogs = blogs.filter(blog => {
-        return blog.category === 'LifeStyle' &&
+        return blog.category === 'Lifestyle' &&
             (blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 blog.content.toLowerCase().includes(searchQuery.toLowerCase()));
     });
@@ -279,7 +279,7 @@ const LifeStyle = () => {
                 setNewBlogAuthor={setNewBlogAuthor}
                 newBlogDate={newBlogDate}
                 setNewBlogDate={setNewBlogDate}
-                selectedCategory={selectedCategory} // Ensure this matches the category 'LifeStyle'
+                selectedCategory={selectedCategory} 
                 setSelectedCategory={setSelectedCategory}
             />
         </div>

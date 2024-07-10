@@ -9,6 +9,7 @@ import Travel from './Components/Pages/Travel';
 import LifeStyle from './Components/Pages/LifeStyle';
 import Food from './Components/Pages/Food';
 import Technology from './Components/Pages/Technology';
+import Home from './Components/Pages/Home'
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -27,7 +28,7 @@ function App() {
           <div className="App">
             <Navbar toggleTheme={toggleTheme} />
             <Routes>
-              <Route path='/' element={<Travel/>}/>
+              <Route path='/' element={<Home/>}/>
               <Route path="/travel" element={<Travel />} />
               <Route path="/lifeStyle" element={<LifeStyle />} />
               <Route path="/food" element={<Food />} />
