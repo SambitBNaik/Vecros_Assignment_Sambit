@@ -20,7 +20,7 @@ const Travel = () => {
     const [newBlogImage, setNewBlogImage] = useState('');
     const [newBlogAuthor, setNewBlogAuthor] = useState('');
     const [newBlogDate, setNewBlogDate] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('Technology');
+    const [selectedCategory, setSelectedCategory] = useState('Travel');
     const [editMode, setEditMode] = useState(null);
     const [editBlogTitle, setEditBlogTitle] = useState('');
     const [editBlogContent, setEditBlogContent] = useState('');
@@ -44,7 +44,7 @@ const Travel = () => {
         setNewBlogImage('');
         setNewBlogAuthor('');
         setNewBlogDate('');
-        setSelectedCategory('Technology'); 
+        setSelectedCategory('Travel'); 
     };
 
     const handleAddBlog = () => {
@@ -57,7 +57,7 @@ const Travel = () => {
                 image: newBlogImage,
                 author: newBlogAuthor,
                 date: newBlogDate,
-                category: selectedCategory
+                category: selectedCategory,
             }));
 
             handleCloseModal();
@@ -122,7 +122,10 @@ const Travel = () => {
     });
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px', textAlign:'center' }}>
+             <Typography variant="h5" gutterBottom>
+                Travel Blogs
+            </Typography>
             <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column" mb={4}>
                 <TextField
                     type='text'

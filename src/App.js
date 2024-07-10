@@ -27,6 +27,7 @@ function App() {
           <div className="App">
             <Navbar toggleTheme={toggleTheme} />
             <Routes>
+              <Route path='/' element={<Travel/>}/>
               <Route path="/travel" element={<Travel />} />
               <Route path="/lifeStyle" element={<LifeStyle />} />
               <Route path="/food" element={<Food />} />

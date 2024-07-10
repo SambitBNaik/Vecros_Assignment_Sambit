@@ -28,16 +28,18 @@ const Navbar = ({ toggleTheme }) => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: theme.palette.primary.main }}>
+    <AppBar position="static" sx={{
+      backgroundColor: theme.palette.mode === 'dark' ? '#263238' : theme.palette.primary.main,
+    }}>
       <Container>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: isMobile ? 1 : 0, marginRight: 'auto' }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: isMobile ? 1 : 0 }}>
             MY BLOG
           </Typography>
+          <div style={{ flexGrow: 1 }} />
           <FormControlLabel
             control={<Switch checked={theme.palette.mode === 'dark'} onChange={toggleTheme} />}
             label={theme.palette.mode === 'dark' ? 'Dark Mode' : 'Light Mode'}
-            sx={{ marginLeft: 'auto' }}
           />
           {isMobile ? (
             <>
@@ -75,3 +77,5 @@ const Navbar = ({ toggleTheme }) => {
 };
 
 export default Navbar;
+
+
